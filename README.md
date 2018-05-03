@@ -6,7 +6,7 @@ runs on localhost:8080
 
 #Endpoints
 
-1. /hello?target={target} -> "Hello, $target"
+1. /hello?target={target} -> "Hello, $target!"
 2. /add?left={left}&right={right} -> "$left + $right = ${left+right}"
 
 #build
