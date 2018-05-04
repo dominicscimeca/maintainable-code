@@ -1,5 +1,8 @@
-package com.cj.dscimeca.onboarding;
+package com.cj.dscimeca.onboarding.http;
 
+import com.cj.dscimeca.onboarding.HttpServletRequestNotImplemented;
+import com.cj.dscimeca.onboarding.HttpServletResponseNotImplemented;
+import com.cj.dscimeca.onboarding.http.HttpApp;
 import org.junit.Test;
 
 import javax.servlet.ServletException;
@@ -50,7 +53,7 @@ public class HttpAppTest {
         return response.writer.getBuffer().toString();
     }
 
-    class ResponseStub extends HttpServletResponseNotImplemented{
+    class ResponseStub extends HttpServletResponseNotImplemented {
         final StringWriter writer = new StringWriter();
         @Override
         public PrintWriter getWriter() throws IOException {

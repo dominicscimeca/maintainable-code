@@ -1,7 +1,7 @@
 <web-app xmlns="http://java.sun.com/xml/ns/javaee" version="2.5">
     <servlet>
         <servlet-name>app</servlet-name>
-        <servlet-class>com.cj.dscimeca.onboarding.HttpApp</servlet-class>
+        <servlet-class>com.cj.dscimeca.onboarding.http.HttpApp</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>app</servlet-name>
