@@ -6,6 +6,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -17,19 +18,38 @@ public class HttpApp extends HttpServlet {
         PrintWriter writer = resp.getWriter();
         String queryString = req.getQueryString();
 
-        Map<String,String> queryMap = getMapFromQueryString(queryString);
+        Map<String, String> queryMap = getMapFromQueryString(queryString);
         String path = req.getPathInfo();
-        if("/hello".equals(path)){
-            String target = queryMap.get("target");
-            writer.print("Hello, " + target + "!");
-        } else {
+        String formatted = handlerMap.get(path).handle(queryMap);
+        writer.print(formatted);
+    }
+
+    private final Map<String, Handler> handlerMap = new HashMap<String, Handler>() {{
+        put("/hello", new Hello());
+        put("/add", new Add());
+    }};
+
+    interface Handler {
+        String handle(Map<String, String> queryMap);
+    }
+
+    class Add implements Handler {
+        @Override
+        public String handle(Map<String, String> queryMap) {
             String leftString = queryMap.get("left");
             String rightString = queryMap.get("right");
             int left = Integer.parseInt(leftString);
             int right = Integer.parseInt(rightString);
             int answer = left + right;
-            String formatted = String.format("%d + %d = %d", left, right, answer);
-            writer.print(formatted);
+            return String.format("%d + %d = %d", left, right, answer);
+        }
+    }
+
+    class Hello implements Handler {
+        @Override
+        public String handle(Map<String, String> queryMap) {
+            String target = queryMap.get("target");
+            return "Hello, " + target + "!";
         }
     }
 
