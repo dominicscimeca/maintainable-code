@@ -12,7 +12,20 @@ import java.util.stream.Stream;
 
 public abstract class  Handler {
 
-    protected Map<String, String> getMapFromQueryString(String queryString) {
+    public abstract Pattern getPathPattern();
+
+    protected abstract String exec(Map<String,String> queryMap);
+
+    public void handle(HttpServletRequest req, HttpServletResponse resp) {
+        String queryString = req.getQueryString();
+        Map<String, String> queryMap = getMapFromQueryString(queryString);
+
+        String result = exec(queryMap);
+
+        writeResponse(result, resp);
+    }
+
+    private Map<String, String> getMapFromQueryString(String queryString) {
         String[] queryParams = queryString.split("&");
 
         Function<String, String> keyMapper = s -> s.split("=")[0];
@@ -21,7 +34,7 @@ public abstract class  Handler {
         return Stream.of(queryParams).collect(Collectors.toMap(keyMapper, valueMapper));
     }
 
-    protected void writeResponse(String body, HttpServletResponse resp){
+    private void writeResponse(String body, HttpServletResponse resp){
         PrintWriter writer = getWriter(resp);
         writer.print(body);
     }
@@ -33,17 +46,4 @@ public abstract class  Handler {
             throw new RuntimeException(e.getMessage(), e);
         }
     }
-
-    public abstract Pattern getPathPattern();
-    
-    public void handle(HttpServletRequest req, HttpServletResponse resp) {
-        String queryString = req.getQueryString();
-        Map<String, String> queryMap = getMapFromQueryString(queryString);
-
-        String result = exec(queryMap);
-
-        writeResponse(result, resp);
-    }
-
-    protected abstract String exec(Map<String,String> queryMap);
 }

@@ -6,7 +6,7 @@ import javax.servlet.http.HttpServletResponse;
 class Dispatcher {
     private final HandlerLookup handlerLookup;
 
-    public Dispatcher(HandlerLookup handlerLookup) {
+    Dispatcher(HandlerLookup handlerLookup) {
         this.handlerLookup = handlerLookup;
     }
 
